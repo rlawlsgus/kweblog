@@ -279,6 +279,9 @@ main {
   box-shadow: var(--shadow);
   overflow: hidden;
   transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .post-card:hover {
@@ -317,8 +320,8 @@ main {
 .post-content.preview {
   padding: 0.5rem 1rem 1rem;
   color: #666;
-  height: 100px;
   overflow: hidden;
+  flex-grow: 1;
 }
 
 .post-footer {
@@ -328,6 +331,7 @@ main {
   padding: 1rem;
   background-color: var(--light-color);
   font-size: 0.9rem;
+  margin-top: auto;
 }
 
 .post-stats {
