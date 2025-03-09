@@ -1,7 +1,8 @@
-<!-- templates/index.html -->
-{% extends 'base.html' %} {% block title %}홈{% endblock %} {% block content %}
+<!-- templates/saved_posts.html -->
+{% extends 'base.html' %} {% block title %}저장된 게시물{% endblock %} {% block
+content %}
 <div class="container">
-  <h1>최신 게시물</h1>
+  <h1>저장된 게시물</h1>
 
   <div class="posts-container">
     {% if posts %} {% for post in posts %}
@@ -44,11 +45,43 @@
           <span><i class="fas fa-comment"></i> {{ post.comments|length }}</span>
         </div>
         <div class="post-date">{{ post.created_at.strftime('%Y-%m-%d') }}</div>
+        <button class="btn-remove-save" data-post-id="{{ post.id }}">
+          <i class="fas fa-times"></i> 저장 해제
+        </button>
       </div>
     </div>
     {% endfor %} {% else %}
-    <p>게시물이 없습니다.</p>
+    <p>저장된 게시물이 없습니다.</p>
     {% endif %}
   </div>
 </div>
+{% endblock %} {% block scripts %}
+<script>
+  // 저장 해제 버튼 기능
+  document.querySelectorAll(".btn-remove-save").forEach((button) => {
+    button.addEventListener("click", function () {
+      const postId = this.getAttribute("data-post-id");
+      const postCard = this.closest(".post-card");
+
+      fetch(`/post/${postId}/save`, {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success" && !data.saved) {
+            postCard.remove();
+
+            // 모든 게시물이 제거되었는지 확인
+            if (document.querySelectorAll(".post-card").length === 0) {
+              document.querySelector(".posts-container").innerHTML =
+                "<p>저장된 게시물이 없습니다.</p>";
+            }
+          }
+        });
+    });
+  });
+</script>
 {% endblock %}

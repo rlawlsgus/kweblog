@@ -1,0 +1,64 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KWeblog - {% block title %}{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo">
+          <a href="{{ url_for('main.index') }}">Kweblog</a>
+        </div>
+        <div class="nav-links">
+          {% if 'user_id' in session %}
+          <a
+            href="{{ url_for('profile.user_profile', username=session['username']) }}"
+            >프로필</a
+          >
+          <a href="{{ url_for('post.new_post') }}">새 글쓰기</a>
+          <a href="{{ url_for('profile.saved_posts') }}">저장됨</a>
+          <a
+            href="{{ url_for('notification.view_notifications') }}"
+            class="notification-link"
+          >
+            알림
+            <span id="notification-badge" class="notification-badge"></span>
+          </a>
+          <a href="{{ url_for('auth.logout') }}">로그아웃</a>
+          {% else %}
+          <a href="{{ url_for('auth.login') }}">로그인</a>
+          <a href="{{ url_for('auth.register') }}">회원가입</a>
+          {% endif %}
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="flash-messages">
+        {% for message in messages %}
+        <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %} {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Kweblog. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

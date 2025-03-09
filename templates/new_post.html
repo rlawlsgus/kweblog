@@ -1,0 +1,55 @@
+<!-- templates/new_post.html -->
+{% extends 'base.html' %} {% block title %}새 게시물 작성{% endblock %} {% block
+content %}
+<div class="container">
+  <h1>새 게시물 작성</h1>
+
+  <form
+    method="POST"
+    action="{{ url_for('post.new_post') }}"
+    enctype="multipart/form-data"
+    class="form"
+  >
+    <div class="form-group">
+      <label for="title">제목</label>
+      <input type="text" id="title" name="title" required />
+    </div>
+
+    <div class="form-group">
+      <label for="content">내용</label>
+      <textarea id="content" name="content" rows="10" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="image">이미지 (선택사항)</label>
+      <input type="file" id="image" name="image" accept="image/*" />
+      <div id="image-preview" class="image-preview"></div>
+    </div>
+
+    <button type="submit" class="btn-primary">게시하기</button>
+    <a href="{{ url_for('main.index') }}" class="btn-secondary">취소</a>
+  </form>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // 이미지 미리보기 기능
+  const imageInput = document.getElementById("image");
+  const imagePreview = document.getElementById("image-preview");
+
+  imageInput.addEventListener("change", function () {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        imagePreview.innerHTML = "";
+        imagePreview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      imagePreview.innerHTML = "";
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,105 @@
+<!-- templates/profile.html -->
+{% extends 'base.html' %} {% block title %}{{ user.username }}의 프로필{%
+endblock %} {% block content %}
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="profile-pic-container">
+      <img
+        src="{{ url_for('static', filename='uploads/profiles/' + user.profile_pic) }}"
+        alt="{{ user.username }}"
+        class="profile-pic-large"
+      />
+    </div>
+
+    <div class="profile-info">
+      <h1>{{ user.username }}</h1>
+
+      <div class="profile-bio">
+        {% if user.bio %}
+        <p>{{ bio_with_links|safe }}</p>
+        {% else %}
+        <p>자기소개가 없습니다.</p>
+        {% endif %}
+      </div>
+
+      {% if 'user_id' in session and session['user_id'] == user.id %}
+      <a href="{{ url_for('profile.edit_profile') }}" class="btn-primary"
+        >프로필 편집</a
+      >
+      {% elif 'user_id' in session and session['user_id'] != user.id %} {% if
+      current_user.is_friend_with(user) %}
+      <a
+        href="{{ url_for('profile.remove_friend', user_id=user.id) }}"
+        class="btn-primary"
+        >서로이웃 삭제</a
+      >
+      {% elif current_user.has_pending_request_to(user) %}
+      <a class="btn-primary">서로이웃 요청 중</a>
+      {% elif current_user.has_pending_request_from(user) %}
+      <a
+        href="{{ url_for('profile.accept_friend', user_id=user.id) }}"
+        class="btn-primary"
+        >서로이웃 수락</a
+      >
+      <a
+        href="{{ url_for('profile.reject_friend', user_id=user.id) }}"
+        class="btn-secondary"
+        >서로이웃 거절</a
+      >
+      {% else %}
+      <a
+        href="{{ url_for('profile.request_friend', user_id=user.id) }}"
+        class="btn-primary"
+        >서로이웃 신청</a
+      >
+      {% endif %} {% endif %}
+    </div>
+  </div>
+
+  <div class="profile-posts">
+    <h2>{{ user.username }}의 게시물</h2>
+
+    <div class="posts-container">
+      {% if posts %} {% for post in posts %}
+      <div class="post-card">
+        <h3>
+          <a href="{{ url_for('post.post_detail', post_id=post.id) }}"
+            >{{ post.title }}</a
+          >
+        </h3>
+
+        {% if post.image %}
+        <div class="post-image">
+          <img
+            src="{{ url_for('static', filename='uploads/posts/' + post.image) }}"
+            alt="Post image"
+          />
+        </div>
+        {% endif %}
+
+        <div class="post-content preview">
+          {{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif
+          %}
+        </div>
+
+        <div class="post-footer">
+          <div class="post-stats">
+            <span
+              ><i class="fas fa-heart"></i> {{ post.liked_by.count() }}</span
+            >
+            <span
+              ><i class="fas fa-comment"></i> {{ post.comments|length }}</span
+            >
+          </div>
+          <div class="post-date">
+            {{ post.created_at.strftime('%Y-%m-%d') }}
+          </div>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <p>게시물이 없습니다.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
