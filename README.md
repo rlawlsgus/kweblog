@@ -64,10 +64,10 @@ password: T5+L8}Ew
 | `/profile/<username>`       | GET    | 사용자 프로필 페이지 | 아니오    |
 | `/edit_profile`             | GET    | 프로필 편집 페이지   | 예        |
 | `/edit_profile`             | POST   | 프로필 편집 처리     | 예        |
-| `/request_friend/<user_id>` | POST   | 서로이웃 요청 전송   | 예        |
-| `/remove_friend/<user_id>`  | POST   | 서로이웃 삭제        | 예        |
-| `/accept_friend/<user_id>`  | POST   | 서로이웃 승인        | 예        |
-| `/reject_friend/<user_id>`  | POST   | 서로이웃 거부        | 예        |
+| `/request_friend/<user_id>` | GET    | 서로이웃 요청 전송   | 예        |
+| `/remove_friend/<user_id>`  | GET    | 서로이웃 삭제        | 예        |
+| `/accept_friend/<user_id>`  | GET    | 서로이웃 승인        | 예        |
+| `/reject_friend/<user_id>`  | GET    | 서로이웃 거부        | 예        |
 | `/saved_posts`              | GET    | 저장한 게시물 보기   | 예        |
 
 ### 게시물 관련 API
