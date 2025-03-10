@@ -83,7 +83,7 @@ def edit_profile():
     return render_template("edit_profile.html", user=user)
 
 
-@profile.route("/friend/request/<int:user_id>")
+@profile.route("/friend/request/<int:user_id>", methods=["POST"])
 @login_required
 def request_friend(user_id):
     current_user = User.query.get(session["user_id"])
@@ -95,7 +95,7 @@ def request_friend(user_id):
     return redirect(url_for("profile.user_profile", username=target_user.username))
 
 
-@profile.route("/friend/remove/<int:user_id>")
+@profile.route("/friend/remove/<int:user_id>", methods=["POST"])
 @login_required
 def remove_friend(user_id):
     current_user = User.query.get(session["user_id"])
@@ -107,7 +107,7 @@ def remove_friend(user_id):
     return redirect(url_for("profile.user_profile", username=target_user.username))
 
 
-@profile.route("/friend/accept/<int:user_id>")
+@profile.route("/friend/accept/<int:user_id>", methods=["POST"])
 @login_required
 def accept_friend(user_id):
     current_user = User.query.get(session["user_id"])
@@ -119,7 +119,7 @@ def accept_friend(user_id):
     return redirect(url_for("profile.user_profile", username=sender.username))
 
 
-@profile.route("/friend/reject/<int:user_id>")
+@profile.route("/friend/reject/<int:user_id>", methods=["POST"])
 @login_required
 def reject_friend(user_id):
     current_user = User.query.get(session["user_id"])
